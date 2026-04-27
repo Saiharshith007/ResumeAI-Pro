@@ -38,32 +38,4 @@ ResumeIQ-Pro/
 
 ---
 
-## ⚙️ Installation & Setup
-
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/your-username/ResumeIQ-Pro.git
-   cd ResumeIQ-Pro
-   ```
-
-2. **Install Dependencies:**
-   It is recommended to use a virtual environment.
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the Application:**
-   ```bash
-   python launcher.py
-   ```
-
----
-
-## 📦 Building the Executable
-To generate a standalone Windows application (`.exe`), use the provided spec file:
-```bash
-pyinstaller ResumeIQ_App.spec
-```
-
----
 
