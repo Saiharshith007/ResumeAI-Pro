@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marvel Geospatial - AI-Powered Resume Screener</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo-area" style="padding-top: 10px;">
+                <img src="assets/marvel-logo.png" alt="Marvel Geospatial" style="max-width: 180px; margin: 0 auto; display: block;">
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="nav-link active"><i data-lucide="layout-grid"></i> Upload & Process</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="main-header">
+                <div class="file-formats-pill">
+                    ● PDF, ● DOCX, ● TXT, ● RTF, ● PPTX
+                </div>
+                <div class="user-avatar-container" style="position: relative;">
+                    <div class="user-avatar" id="profileDropdownBtn" style="cursor: pointer; transition: 0.3s;">
+                        <i data-lucide="user"></i>
+                    </div>
+                    
+                    <div class="profile-dropdown" id="profileDropdown" style="display: none; position: absolute; right: 0; top: 120%; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; min-width: 200px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100; overflow: hidden; opacity: 0; transform: translateY(-10px); transition: all 0.3s ease;">
+                        <div class="profile-header" style="padding: 16px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.02);">
+                            <p style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 4px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Signed In As</p>
+                            <span id="profileName" style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); word-break: break-all;">User</span>
+                        </div>
+                        <div class="profile-menu" style="padding: 8px;">
+                            <button class="logout-btn" onclick="logoutSession()" style="width: 100%; display: flex; align-items: center; gap: 8px; background: transparent; border: none; color: #ff4d4d; padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: 0.2s; font-family: inherit;">
+                                <i data-lucide="log-out" style="width: 16px; height: 16px;"></i> Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <section class="config-section card">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <div>
+                            <h2>Job Description, Keywords & Skills</h2>
+                            <p>Define what you're looking for in candidates</p>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label><i data-lucide="edit-3"></i> Job Description</label>
+                        <textarea id="jobDescription" placeholder="Paste the job description here..."></textarea>
+                        <div class="char-count">0 words | 0 characters</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label><i data-lucide="search"></i> Required Keywords</label>
+                        <div class="keywords-input-area" id="keywordsInputArea">
+                            <input type="text" id="keywordInput" placeholder="Press Enter or comma to add">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label><i data-lucide="award"></i> Required Skills</label>
+                        <div class="keywords-input-area" id="skillsInputArea">
+                            <input type="text" id="skillInput" placeholder="Press Enter or comma to add skills">
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border);">
+                        <label style="display: flex; justify-content: space-between; align-items: center;">
+                            <span><i data-lucide="sliders"></i> Shortlist Threshold</span>
+                            <span id="thresholdValue" style="color: var(--accent-purple); font-weight: 800; font-size: 1.1rem; background: rgba(139, 92, 246, 0.1); padding: 4px 12px; border-radius: 6px;">30%</span>
+                        </label>
+                        <input type="range" id="thresholdSlider" min="0" max="100" value="30" style="width: 100%; margin-top: 10px; accent-color: var(--accent-purple); cursor: pointer;">
+                        <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 8px;">Only resumes with an overall score equal to or above this percentage will be automatically shortlisted.</p>
+                    </div>
+                </section>
+
+                <section class="upload-section card">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <div>
+                            <h2>Source Directory Paths</h2>
+                            <p>Provide local OS paths to scan for resumes</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 16px; display: flex; gap: 12px; align-items: center;">
+                        <div style="flex: 1; display: flex; position: relative;">
+                            <i data-lucide="folder-input" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-dim); width: 18px; height: 18px;"></i>
+                            <input type="text" id="pathInput" placeholder="Type absolute folder path (e.g., C:\Users\Documents\Resumes)..." style="flex: 1; background: #06090f; border: 1px solid var(--border); border-radius: 10px; padding: 14px 14px 14px 44px; color: var(--text-main); outline: none; font-size: 0.9rem; transition: 0.3s;">
+                        </div>
+                        <button type="button" class="btn-primary" id="addPathBtn" style="padding: 13px 24px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; white-space: nowrap; height: 46px;"><i data-lucide="plus" style="width: 16px; height: 16px;"></i> Add Path</button>
+                    </div>
+
+                    <div class="file-list-area" id="fileListArea" style="display:none; margin-top: 24px;"></div>
+
+                    <div id="screeningProgressContainer" style="display:none; margin-top: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <span id="progressStatus" style="color: var(--text-dim); font-size: 0.85rem; font-weight: 600;">Processing...</span>
+                            <span id="progressPercent" style="color: var(--accent-purple); font-size: 0.85rem; font-weight: 700;">0%</span>
+                        </div>
+                        <div style="width: 100%; height: 8px; background: #06090f; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                            <div id="screeningProgressBar" style="width: 0%; height: 100%; background: var(--gradient-purple); transition: width 0.3s ease;"></div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-primary start-btn" id="startScreeningBtn" style="width: 100%; margin-top: 20px; padding: 16px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <i data-lucide="zap"></i> Start Screening
+                    </button>
+                </section>
+
+                <section class="results-dashboard card" id="resultsDashboard" style="display:none;">
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <i data-lucide="users"></i>
+                            <div class="stat-value" id="totalProcessed">0</div>
+                            <div class="stat-label">Total Processed</div>
+                        </div>
+                        <div class="stat-card">
+                            <i data-lucide="check-circle" color="#4CAF50"></i>
+                            <div class="stat-value" id="totalShortlisted">0</div>
+                            <div class="stat-label">Shortlisted</div>
+                        </div>
+                        <div class="stat-card">
+                            <i data-lucide="bar-chart-3"></i>
+                            <div class="stat-value" id="averageScore">0</div>
+                            <div class="stat-label">Average Score</div>
+                        </div>
+                        <div class="stat-card">
+                            <i data-lucide="star"></i>
+                            <div class="stat-value" id="topScore">0</div>
+                            <div class="stat-label">Top Score</div>
+                        </div>
+                    </div>
+
+                    <div class="results-table-section input-group">
+                        <label>Screening Results</label>
+                        
+                        <div class="table-controls" style="justify-content: flex-end; gap: 10px; display: flex;">
+                            <button class="btn-outline active" id="showAllBtn">All Results</button>
+                            <button class="btn-outline" id="showShortlistedBtn" style="border-color: #4CAF50; color: #4CAF50;">Shortlisted Only</button>
+                            <button class="btn-outline active" id="newScreeningBtn" style="background: var(--gradient-purple); border: none; color: white;"><i data-lucide="refresh-cw"></i> New Screening</button>
+                        </div>
+
+                        <table class="results-table" id="resultsTable">
+                            <thead>
+                                <tr>
+                                    <th>RANK</th>
+                                    <th>STATUS</th>
+                                    <th>RESUME</th>
+                                    <th>OVERALL</th>
+                                    <th>SEMANTIC</th>
+                                    <th>KEYWORDS</th>
+                                    <th>MATCHED</th>
+                                    <th>SKILLS MATCH</th>
+                                    <th>EXP.</th>
+                                    <th>FORMAT</th>
+                                    <th>DETAILS</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <!-- Logout Confirmation Modal -->
+    <div id="logoutModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div class="card" style="max-width: 400px; width: 90%; text-align: center; border-color: var(--accent-purple); box-shadow: 0 0 50px rgba(99, 102, 241, 0.2);">
+            <div style="width: 60px; height: 60px; background: rgba(255, 77, 77, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.2);">
+                <i data-lucide="log-out" style="width: 30px; height: 30px;"></i>
+            </div>
+            <h2 style="margin-bottom: 12px; font-size: 1.5rem;">Ready to Leave?</h2>
+            <p style="color: var(--text-dim); margin-bottom: 30px; font-size: 0.95rem;">Are you sure you want to go back? This will terminate your current active session.</p>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn-outline" onclick="closeLogoutModal()" style="flex: 1; justify-content: center; padding: 14px;">Cancel</button>
+                <button class="btn-primary" onclick="proceedLogout()" style="flex: 1; justify-content: center; padding: 14px; background: #ff4d4d;">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

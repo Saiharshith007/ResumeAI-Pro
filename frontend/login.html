@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marvel Geospatial - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/login.css">
+    <style>
+        /* Force black background immediately to prevent any flash/flicker */
+        html, body { background-color: #030407 !important; }
+        .login-card { visibility: hidden; } /* Hide card until CSS is ready */
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="stars3"></div>
+    
+    <div class="login-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        
+        <div class="login-card">
+            <div class="logo-area">
+                <img src="assets/marvel-logo.png" alt="Marvel Geospatial" id="companyLogo" style="max-width: 200px; border-radius: 12px; margin-bottom: 20px;">
+                <div class="brand-text">
+                    <p style="letter-spacing: 3px;">RESUME SCREENER</p>
+                </div>
+            </div>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">Work Email / ID</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="mail"></i>
+                        <input type="text" id="email" placeholder="name@company.com or ID">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <i data-lucide="lock"></i>
+                        <input type="password" id="password" placeholder="••••••••">
+                    </div>
+                </div>
+                
+                <div id="errorMsg" style="color: #ff4d4d; font-size: 0.85rem; margin-bottom: 20px; display: none; text-align: center; font-weight: 600;">Invalid email or password.</div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox">
+                        <span class="custom-checkbox"></span>
+                        Remember device
+                    </label>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+
+                <button type="button" class="btn-primary login-btn" onclick="attemptLogin()">
+                    <span>Initialize Session</span>
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    <script>
+        lucide.createIcons();
+
+        function attemptLogin() {
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const password = document.getElementById('password').value;
+            const errorMsg = document.getElementById('errorMsg');
+            
+            if (!email || !password) {
+                errorMsg.textContent = 'Please enter both ID and password.';
+                errorMsg.style.display = 'block';
+                return;
+            }
+            
+            // Demo Credentials: allow admin@company.com or simply 'admin'
+            if((email === 'admin@company.com' || email === 'admin') && password === 'admin123') {
+                // Change text instead of innerHTML to prevent icon reflow flicker
+                const btn = document.querySelector('.login-btn span');
+                if(btn) btn.textContent = 'Initializing...';
+                
+                // Save session
+                localStorage.setItem('resumeiq_user', email);
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 800);
+            } else {
+                errorMsg.textContent = 'Invalid email/ID or password.';
+                errorMsg.style.display = 'block';
+            }
+        }
+        
+        // Let user hit enter
+        document.getElementById('password').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                attemptLogin();
+            }
+        });
+        document.getElementById('email').addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                attemptLogin();
+            }
+        });
+    </script>
+</body>
+</html>
